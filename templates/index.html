@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+    <title>Помічник учителя</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<head>
+    <title></title>
+</head>
+<body>
+     <nav class="navbar navbar-default">
+        <div class="container">
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><h2>Помічник учителя : виберіть клас-предмет</h2></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <div class="container"
+        <div class="bs-example">
+            <div class="btn-group-vertical" role="group" aria-label="Меню вибору">
+                <a class="btn btn-default" href="#" role="button"><p class="text-left">5-А клас інформатика</p></a>
+                <a class="btn btn-default" href="#" role="button"><p class="text-left">5-Б клас інформатика</p></a>
+                <a class="btn btn-default" href="#" role="button"><p class="text-left">6-А клас інформатика</p></a>
+                <a class="btn btn-default" href="#" role="button"><p class="text-left">6-Б клас інформатика</p></a>
+                <a class="btn btn-default" href="klas_predmet" role="button"><p class="text-left">Шаблон</p></a>
+            </div>
+        </div>
+    </div>
+</body>
+    <script src="{% static 'js/jquery-1.11.3.js' %}"></script>
+    <script src="{% static 'js/article.js' %}"></script>
+</html>

@@ -1,0 +1,61 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en " xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Вихідні дні</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+     <nav class="navbar navbar-default">
+        <div class="container">
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href=".."><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a></li>
+                    <li><h2>Розклад уроків по предмету - дні викладання</h2></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <select name="add_den">
+                <option selected>виберіть день</option>
+                <option>понеділок</option>
+                <option>вівторок</option>
+                <option>середа</option>
+                <option>четвер</option>
+                <option>п'ятниця</option>
+            </select>
+            <button class="btn-primary margin-for-btn" type="submit">Додати або видалити день тижня</button>
+
+            <h3 class="text-left"><strong>Дні тижня викладання предмету:</strong></h3>
+            <table class="table-condensed">
+                <tr>
+                    <th><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></th>
+                    <th>День тижня</th>
+                </tr>
+            {% for den in dni %}
+                <tr>
+                    <td><input id="mitka" type="checkbox" name="mitka{{ den.id }}"></td>
+                    <td>{{ den.name }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </form>
+
+
+    </div>
+
+</body>
+<script src="{% static 'js/jquery-1.11.3.js' %}"></script>
+<script src="{% static 'js/article.js' %}"></script>
+
+</html>

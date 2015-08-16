@@ -1,0 +1,55 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en " xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Вихідні дні</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+     <nav class="navbar navbar-default">
+        <div class="container">
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href=".."><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a></li>
+                    <li><h2>Список учнів класу - зарахування учнів в клас</h2></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{ form }}
+            <input type="text" name="add_uch"  size=40 placeholder="Введіть Прізвище та Ім'я учня класу">
+            <button class="btn-primary margin-for-btn" type="submit">Додати</button>
+
+            <h3 class="text-left"><strong>Список учнів класу:</strong></h3>
+            <table class="table-condensed">
+                <tr>
+                    <th>№ п/п</th>
+                    <th>Прізвище та ім'я учня</th>
+                </tr>
+            {% for uchen in uchni %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ uchen.pib }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </form>
+
+
+    </div>
+
+</body>
+<script src="{% static 'js/jquery-1.11.3.js' %}"></script>
+<script src="{% static 'js/article.js' %}"></script>
+
+</html>

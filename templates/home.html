@@ -1,0 +1,39 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+    <title>Помічник учителя</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<head>
+    <title></title>
+</head>
+<body>
+     <nav class="navbar navbar-default">
+        <div class="container">
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href=".."><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a></li>
+                    <li><h2>Помічник учителя</h2></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <div class="container"
+        <div class="bs-example">
+            <div class="btn-group-vertical" role="group" aria-label="Меню вибору">
+                <a class="btn btn-default" href="rozklad" role="button"><p class="text-left">Розклад викладання предмета</p></a>
+                <a class="btn btn-default" href="job" role="button"><p class="text-left">Додаткові робочі (заміни)</p></a>
+                <a class="btn btn-default" href="repoze" role="button"><p class="text-left">Додаткові вихідні (заміни, канікули)</p></a>
+                <a class="btn btn-default" href="tema" role="button"><p class="text-left">Календарно-тематичне планування</p></a>
+                <a class="btn btn-default" href="uchni" role="button"><p class="text-left">Учні класу</p></a>
+                <a class="btn btn-default" href="journal" role="button"><p class="text-left">Журнал успішності класу</p></a>
+            </div>
+        </div>
+    </div>
+</body>
+    <script src="{% static 'js/jquery-1.11.3.js' %}"></script>
+    <script src="{% static 'js/article.js' %}"></script>
+</html>

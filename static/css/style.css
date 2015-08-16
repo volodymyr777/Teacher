@@ -1,0 +1,26 @@
+.decoration:hover{
+	text-decoration: none;
+}
+.decoration:visited{
+	text-decoration: none;
+}
+.decoration:active{
+	text-decoration: none;
+}
+.decoration:focus{
+	text-decoration: none;
+}
+.margin-for-likes {
+	float: right;
+}
+.form-control1{
+	max-width: 1140px;
+	max-height: 600px;
+	margin-top: 5px;
+}
+.margin-for-btn {
+	margin-top: 8px;
+}
+.margin1 {
+	color: black;
+}

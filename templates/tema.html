@@ -1,0 +1,78 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en " xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Вихідні дні</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+     <nav class="navbar navbar-default">
+        <div class="container">
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href=".."><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a></li>
+                    <li><h2>Календарно тематичне планування роботи вчителя - імпорт</h2></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table table-responsive">
+                <tr>
+                    <td>
+                        {{ form.file }}
+                    </td>
+                    <td>
+                        <button class="btn-primary margin-for-btn" type="submit" name="itema" value="item">Імпортувати теми з вибраного файлу Excel</button></nobr>
+                    </td>
+                    <td>
+                        <button class="btn-primary margin-for-btn" type="submit" name="itema" value="iden">Імпортувати розрахункові дати</button></nobr>
+                    </td>
+                </tr>
+            </table>
+
+            <h3 class="text-left"><strong>Імпортовані теми:</strong></h3>
+            <table class="table table-bordered">
+                <tr>
+                    <th width="2%"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i></th>
+                    <th>№</th>
+                    <th class="text-nowrap" width="10%">Дата</th>
+                    <th>Тема</th>
+                </tr>
+            {% for element in elements %}
+                <tr>
+                    {% if element.num > '' %}
+                        <td width="2%"><input id="mitka" type="checkbox" name="mitka{{ element.id }}"></td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td>{{ element.num }}</td>
+                    {% if element.num > '' %}
+                        <td class="text-nowrap"  width="10%">{{ element.dat|date:"d.m.Y" }}</td>
+                        <td>{{ element.tema }}</td>
+                    {% else %}
+                        <td></td>
+                        <td><h4>{{ element.tema }}</h4></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </table>
+        </form>
+
+
+    </div>
+
+</body>
+<script src="{% static 'js/jquery-1.11.3.js' %}"></script>
+<script src="{% static 'js/article.js' %}"></script>
+
+</html>

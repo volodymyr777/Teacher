@@ -1,0 +1,87 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en " xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Вихідні дні</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+     <nav class="navbar navbar-default">
+        <div class="container">
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><h2>Помічник учителя</h2></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+     <nav class="navbar-default">
+        <ul class="nav navbar-nav">
+            <li><a href="../journal"><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a></li>
+            <li><h2>Редагування журналу успішності учнів класу</h2></li>
+        </ul>
+
+     </nav>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <button class="btn-primary margin-for-btn" type="submit">Зберегти зміни</button>
+
+
+        <table class="table table-bordered">
+        <tr>
+            <td>№</td>
+            <td>Прізвище, ім'я</td>
+            {% for data in dat %}
+                <td>{{ data.dat|date:"d" }}<br>{{ data.dat|date:"m" }}</td>
+            {% endfor %}
+
+        </tr>
+        <tr>
+        {% for p in pib %}
+            <td>{{ forloop.counter }}</td>
+            <td  class="text-nowrap">{{ p.pib }}</td>
+                {% for data in dat %}
+                    <td>
+                        <script>ocinka=0</script>
+                        {% for j in jor %}
+                            {% if p.id == j.uch_id and data.num|floatformat == j.tema_id|floatformat %}
+                                <script>
+                                    ocinka=1;
+                                    //alert('<input type="text" name="oc-{{ p.id }}-{{ data.num }}" style="width: 22px; text-align: center" maxlength=2 value="{{ j.ocinka}}">');
+                                    document.write('<input type="text" name="oc-{{ p.id }}-{{ data.num }}" style="width: 22px; text-align: center" maxlength=2 value="{{ j.ocinka}}">');
+                                </script>
+
+                            {% endif %}
+                        {%  endfor %}
+                        <script>
+                            if (ocinka==0) {
+                                //alert('<input type="text" name="oc-{{ p.id }}-{{ data.num }}" style="width: 22px; text-align: center" maxlength=2 value="">');
+                                document.write('<input type="text" name="oc-{{ p.id }}-{{ data.num }}" style="width: 22px; text-align: center" maxlength=2 value="">');
+                            }
+                        </script>
+                    </td>
+                {% endfor %}
+        </tr>
+        {% endfor %}
+
+        </tr>
+        <tr>
+        </tr>
+        </table>
+    </form>
+
+
+</body>
+<script src="{% static 'js/jquery-1.11.3.js' %}"></script>
+<script src="{% static 'js/article.js' %}"></script>
+
+</html>
