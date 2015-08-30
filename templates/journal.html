@@ -7,6 +7,7 @@
     <title>Вихідні дні</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
 </head>
 
 <body>
@@ -33,40 +34,28 @@
      </nav>
 
 
-    <form method="POST" action="">
-        {% csrf_token %}
+     <table class="table table-bordered">
+     {% for d in jor %}
+         <tr>
+         {% for dd in d %}
+            {% if dd|length >= 1 %}
+                {% if forloop.counter == 1 or forloop.counter == 2 %}
+                    <td class="text-nowrap">{{ dd }}</td>
+                {% else %}
+                    {% if dd|slice:"3:"|cut:" "|length > 0 %}
+                        <td class="text-nowrap" title="{{ dd|slice:"1:" }}" bgcolor="#F5F5F1" align="center">{{ dd|slice:"1" }}</td>
+                    {% else %}
+                        <td class="text-nowrap" align="center">{{ dd|slice:"2" }}</td>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <td  class="text-nowrap">{{ dd|date:"d" }}<br>{{ dd|date:"m" }}</td>
+            {% endif %}
+         {% endfor %}
+     {% endfor %}
+     </tr>
 
-        <table class="table table-bordered">
-        <tr>
-            <td>№</td>
-            <td>Прізвище, ім'я</td>
-            {% for data in dat %}
-                <td>{{ data.dat|date:"d" }}<br>{{ data.dat|date:"m" }}</td>
-            {% endfor %}
-
-        </tr>
-        <tr>
-            {% for p in pib %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td  class="text-nowrap">{{ p.pib }}</td>
-                        {% for data in dat %}
-                            <td>
-                                {% for j in jor %}
-                                    {% if p.id == j.uch_id and data.num|floatformat == j.tema_id|floatformat %}
-                                        <div align=center>{{ j.ocinka }}</div>
-                                    {% endif %}
-                                {%  endfor %}
-                            </td>
-                        {% endfor %}
-                </tr>
-            {% endfor %}
-
-        </tr>
-        <tr>
-        </tr>
-        </table>
-    </form>
+     </table>
 
 
 </body>

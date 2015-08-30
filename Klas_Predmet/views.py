@@ -3,11 +3,11 @@ from django.shortcuts import render
 from django.db import IntegrityError
 from .models import DataR, DataJ, Tema, Rozklad, Uch, Journal
 import xlrd
-import sqlite3
 from django.conf import settings
 from datetime import datetime, date, timedelta
 import datetime
 from .forms import TemaForm, RozkladForm, UploadFileForm
+#from django.http.response import JsonResponse
 
 from cont_proc import str_to_int
 from cont_switch import switch_case
@@ -262,42 +262,151 @@ def uchni(request):
     return render(request, 'uchni.html', ctx)
 
 def journal(request):
+    # отримання значень з таблиць даних
+    d = Tema.objects.all()
+    u = Uch.objects.all()
+    j = Journal.objects.all()
+
+    # формування рядка дат журналу
+    ocinka = []
+    rjadok = []
+    rjadok.append('№')
+    rjadok.append('Прізвище, ім\'я')
+    for dd in d:
+        rjadok.append(dd.dat)
+    ocinka.append(rjadok)
+
+    # формування в журналі рядків оцінок
+    for i, uu in enumerate(u):
+        rjadok = []
+        rjadok.append(str(i+1))
+        rjadok.append(uu.pib)
+        for dd in d:
+            if dd.num > '':
+                for jj in j:
+                    if uu.id == jj.uch_id and dd.num == str(jj.tema_id):
+                        rjadok.append(jj.ocinka+' '+jj.comment)
+            else:
+                rjadok.append('')
+        ocinka.append(rjadok)
     ctx = {
-        'dat' : Tema.objects.all(),
-        'pib' : Uch.objects.all(),
-        'jor' : Journal.objects.all()
+        'jor' : ocinka
     }
     return render(request, 'journal.html', ctx)
 
 def journal_edit(request):
     if request.method == "POST":
-        try:
-            td = Tema.objects.all()
-            uc = Uch.objects.all()
-            for uu in uc:
-                for dd in td:
-                    if dd.num !='':
-                        u = uu.id
-                        d = dd.num
-                        edit = request.POST.get('oc-'+str(uu.id)+'-'+str(dd.num))
-                        try:
-                            j = Journal.objects.get(tema_id=d , uch_id=u)
-                            #j = Journal.objects.filter(uch_id=u).get(tema_id=d)
-                            j.ocinka = edit
-                            j.save()
-                        except Journal.DoesNotExist:
-                            Journal.objects.create(
-                                uch_id = u,
-                                tema_id = d,
-                                ocinka = edit
-                            )
-                        #print(u, d, edit)
+        # створення двох масивів
+        # begin - до початку редагування
+        # end - після завершення редагування
+        begin = []
+        end = []
+        for u in Uch.objects.all():
+            begin_rjadok = []
+            end_rjadok = []
+            for t in Tema.objects.all():
+                get_begin = 'be-'+str(u.id)+'-'+str(t.id)
+                #print(get_begin)
+                edit_begin = request.POST.get(get_begin)
+                #print(edit_begin)
+                get_end = 'oc-'+str(u.id)+'-'+str(t.id)
+                #print(get_end)
+                edit_end = request.POST.get(get_end)
+                #print(edit_end)
+                if edit_end != None :
+                    try:
+                        begin_rjadok.append(edit_begin.rjust(3,' ')+str(u.id).rjust(3, ' ')+str(t.id).rjust(3, ' '))
+                        end_rjadok.append(edit_end.rjust(3,' ')+str(u.id).rjust(3, ' ')+str(t.id).rjust(3, ' '))
+                    except Journal.DoesNotExist:
+                        end_rjadok.append('   '+str(u.id).rjust(3, ' ')+str(t.id).rjust(3, ' '))
+                        Journal.objects.create(
+                            uch_id = str(u),
+                            tema_id = str(t),
+                            ocinka = edit_end
+                        )
+            begin.append(begin_rjadok)
+            end.append(end_rjadok)
 
-        except:
+
+        # визначення кількості рядків і стовпчиків
+        kr = len(begin)
+        for r in begin:
+            ks = len(r)
+
+        # визначення елементів редагування, які зазнали змін
+        for i in range(kr):
+            for j in range(ks):
+                if begin[i][j][:3].strip() != end[i][j][:3].strip():
+                    ###print('bulo ->'+begin[i][j][:3].strip())
+                    ###print('stalo ->'+end[i][j][:3].strip())
+                    ###print('->'+begin[i][j]+'<-')
+                    ###print('id uchnja ->'+begin[i][j][3:6].strip())
+                    ###print('id temy ->'+begin[i][j][6:].strip())
+                    ###pass
+                    oc = end[i][j][:3].strip()
+                    idu = begin[i][j][3:6].strip()
+                    idt = begin[i][j][6:].strip()
+                    # проведення змін в таблиці Journal
+                    j = Journal.objects.filter(uch_id=idu, tema_id=idt).get()
+                    j.ocinka = oc
+                    j.save()
+
+
+        for i, k in enumerate(begin):
             pass
+            #print(i,k)
+
+
+        for i, k in enumerate(end):
+            pass
+            #print(i,k)
+
+    # отримання значень з таблиць даних
+    d = Tema.objects.all()
+    u = Uch.objects.all()
+    j = Journal.objects.all()
+
+    # формування рядка дат журналу
+    ocinka = []
+    rjadok = []
+    rjadok.append('№')
+    rjadok.append('Прізвище, ім\'я')
+    for dd in d:
+        rjadok.append(dd.dat)
+    ocinka.append(rjadok)
+
+    # формування в журналі рядків оцінок
+    for i, uu in enumerate(u):
+        rjadok = []
+        rjadok.append(str(i+1))
+        rjadok.append(uu.pib)
+        for dd in d:
+            if dd.num > '':
+                for jj in j:
+                    if uu.id == jj.uch_id and dd.num == str(jj.tema_id):
+                        rjadok.append(jj.ocinka.rjust(2, ' ')+str(jj.uch_id).rjust(3, ' ')+str(jj.tema_id).rjust(3, ' '))
+            else:
+                rjadok.append('')
+        ocinka.append(rjadok)
+
+    # формування масиву початкових даних оцінок
+    # для переходу в режим редагування
+    begin = []
+    for uu in u:
+        begin_rjadok = []
+        for dd in d:
+            if dd.num > '':
+                for jj in j:
+                    if uu.id == jj.uch_id and dd.num == str(jj.tema_id):
+                        begin_rjadok.append(jj.ocinka.rjust(2, ' ')+str(jj.uch_id).rjust(3, ' ')+str(jj.tema_id).rjust(3, ' '))
+            else:
+                pass
+
+        begin.append(begin_rjadok)
+
     ctx = {
-        'dat' : Tema.objects.all(),
-        'pib' : Uch.objects.all(),
-        'jor' : Journal.objects.all()
+        'jor' : ocinka,
+        'beg' : begin
     }
+
     return render(request, 'journal_edit.html', ctx)

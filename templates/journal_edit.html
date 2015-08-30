@@ -37,46 +37,33 @@
 
 
         <table class="table table-bordered">
-        <tr>
-            <td>№</td>
-            <td>Прізвище, ім'я</td>
-            {% for data in dat %}
-                <td>{{ data.dat|date:"d" }}<br>{{ data.dat|date:"m" }}</td>
+        {% for d in beg %}
+            {% for dd in d %}
+                <input type="hidden" name="be-{{ dd|slice:"2:5"|cut:" " }}-{{ dd|slice:"5:"|cut:" " }}" style="width: 30px; text-align: center" maxlength=2 size="4" value="{{ dd|slice:"2" }}">
             {% endfor %}
-
-        </tr>
-        <tr>
-        {% for p in pib %}
-            <td>{{ forloop.counter }}</td>
-            <td  class="text-nowrap">{{ p.pib }}</td>
-                {% for data in dat %}
-                    <td>
-                        <script>ocinka=0</script>
-                        {% for j in jor %}
-                            {% if p.id == j.uch_id and data.num|floatformat == j.tema_id|floatformat %}
-                                <script>
-                                    ocinka=1;
-                                    //alert('<input type="text" name="oc-{{ p.id }}-{{ data.num }}" style="width: 22px; text-align: center" maxlength=2 value="{{ j.ocinka}}">');
-                                    document.write('<input type="text" name="oc-{{ p.id }}-{{ data.num }}" style="width: 22px; text-align: center" maxlength=2 value="{{ j.ocinka}}">');
-                                </script>
-
-                            {% endif %}
-                        {%  endfor %}
-                        <script>
-                            if (ocinka==0) {
-                                //alert('<input type="text" name="oc-{{ p.id }}-{{ data.num }}" style="width: 22px; text-align: center" maxlength=2 value="">');
-                                document.write('<input type="text" name="oc-{{ p.id }}-{{ data.num }}" style="width: 22px; text-align: center" maxlength=2 value="">');
-                            }
-                        </script>
-                    </td>
-                {% endfor %}
-        </tr>
         {% endfor %}
 
-        </tr>
-        <tr>
-        </tr>
-        </table>
+        {% for d in jor %}
+            <tr>
+            {% for dd in d %}
+                {% if dd|length >= 1 %}
+                    {% if forloop.counter == 1 or forloop.counter == 2 %}
+                        <td class="text-nowrap">{{ dd }}</td>
+                    {% else %}
+                        <td class="text-nowrap">
+                            <input type="text" name="oc-{{ dd|slice:"2:5"|cut:" " }}-{{ dd|slice:"5:"|cut:" " }}" style="width: 30px; text-align: center" maxlength=2 size="4" value="{{ dd|slice:"2" }}">
+                            <!img src="{% static 'image/punktg.jpg' %}">
+                        </td>
+                    {% endif %}
+                {% else %}
+                    <td  class="text-nowrap">{{ dd|date:"d" }}<br>{{ dd|date:"m" }}</td>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+         </tr>
+
+
+         </table>
     </form>
 
 
